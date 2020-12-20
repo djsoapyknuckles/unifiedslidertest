@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.960
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DildoMachine2UnifiedScaleSlider", "DildoMachine2UnifiedScaleSlider.csproj", "{99B3413E-11DA-4DAC-9550-C042477297AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Unity = Debug|Unity
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99B3413E-11DA-4DAC-9550-C042477297AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99B3413E-11DA-4DAC-9550-C042477297AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99B3413E-11DA-4DAC-9550-C042477297AB}.Debug|Unity.ActiveCfg = Debug|Unity
+		{99B3413E-11DA-4DAC-9550-C042477297AB}.Debug|Unity.Build.0 = Debug|Unity
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E48E91B3-951A-4D75-813B-6F2432676C2F}
+	EndGlobalSection
+EndGlobal
