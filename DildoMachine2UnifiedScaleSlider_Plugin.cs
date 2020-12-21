@@ -115,12 +115,9 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
 
                 // help
                 JSONStorableString helpText = new JSONStorableString("Help",
-                    "<color=#000><size=35><b>Help</b></size></color>\n\n" +
-                    "<color=#333>" +
-                    "<b>Dildo Machine Controller</b> let's you control customizable attributes of the Dildo Machine 2 asset.\n\n" +
-                    "Set the options" +
-                    "</color>"
-                );
+                    "<b>Dildo Machine Controller</b> lets you control customizable attributes of the Dildo Machine 2 asset.\n\n" +
+                    "Change the options on the left to configure the selected attachment \n\n" + "Save your scene with this plugin loaded if you want your configuration values restored when loading saved scene \n\n" +
+                    "Reload the plugin to restore the <i>default</i> values");
                 UIDynamic helpTextfield = CreateTextField(helpText, true);
                 helpTextfield.height = 1100.0f;
             
