@@ -23,7 +23,6 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
     private string objectNameSearchString = "dildoMachine";
     public Transform ObjectRoot;
     private Transform machineTR;
-
     private Transform defaultDildo;
     private Transform chanceUnflaredDildo;
     private Transform rexDildo;
@@ -44,15 +43,18 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
     // Security and initialization
     private bool editorInitialized = false;
     private int initLoops = 0;
-    private int maxInitLoops = 300;
+    private int maxInitLoops = 3600;
     private Transform selectedDildo = null;
     public override void Init()
     {
         try
         {
             // We only authorize the script to be used by a CUA
-            if (containingAtom.type != "CustomUnityAsset")
-            {
+           if (containingAtom.type != "CustomUnityAsset")
+                {
+                   SuperController.LogError("Dildo Machine Controller - Please add this script to dildoMachine Custom Unity Asset ( script disabled ).");
+                    return;
+                }
                 //**************UI CODE GOES HERE*********************
                 //animation toggle
                 animOn_Off = new JSONStorableBool("animation on/off", false, animOn_OffCallback);
@@ -60,7 +62,7 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                 CreateToggle(animOn_Off, false);
                 RegisterBool(animOn_Off);
 
-                /* // JSONStorableFloat Rotation Slider
+                // JSONStorableFloat Rotation Slider
                  ROTATIONsliderFloat = new JSONStorableFloat("Rotation", 0f, RotationFloatCallback, 0f, 90f, true);
                  ROTATIONsliderFloat.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(ROTATIONsliderFloat);
@@ -85,25 +87,43 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                  RegisterStringChooser(dildoChoice);
                  UIDynamicPopup udp = CreatePopup(dildoChoice, false);
                  //CreateScrollablePopup(jchooser, true);
-                 udp.labelWidth = 100f;
+                 udp.labelWidth = 100f; 
 
-                 //Register SCALE StorableFloats for each dildo
+                //Register SCALE StorableFloats for each dildo
+                 SCALEdefaultdildo = new JSONStorableFloat("scaledefaultdildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
                  SCALEdefaultdildo.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(SCALEdefaultdildo);
+
+                 SCALEchanceunflareddildo = new JSONStorableFloat("scalechanceunflareddildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
                  SCALEchanceunflareddildo.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(SCALEchanceunflareddildo);
+
+                 SCALErexdildo = new JSONStorableFloat("scalerexddildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
                  SCALErexdildo.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(SCALErexdildo);
+
+                 SCALEtuckerdildo = new JSONStorableFloat("scaletuckerdildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
                  SCALEtuckerdildo.storeType = JSONStorableParam.StoreType.Full;
-                 RegisterFloat(SCALEtuckerdildo);
+                 RegisterFloat(SCALEtuckerdildo); 
 
                  //JSONStorableFloat Scale Slider
-                 SCALEsliderFloat = new JSONStorableFloat("Scale Selected Dildo", 1f, ScaleFloatCallback, 0.5f, 1.5f, true);
+                 SCALEsliderFloat = new JSONStorableFloat("Scale Selected Dildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true); 
                  SCALEsliderFloat.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(SCALEsliderFloat);
-                 SCALEslider = CreateSlider(SCALEsliderFloat, false);*/
+                 SCALEslider = CreateSlider(SCALEsliderFloat, false);
+            
 
-            }
+                // help
+                JSONStorableString helpText = new JSONStorableString("Help",
+                    "<color=#000><size=35><b>Help</b></size></color>\n\n" +
+                    "<color=#333>" +
+                    "<b>Dildo Machine Controller</b> let's you control customizable attributes of the Dildo Machine 2 asset.\n\n" +
+                    "Set the options" +
+                    "</color>"
+                );
+                UIDynamic helpTextfield = CreateTextField(helpText, true);
+                helpTextfield.height = 1100.0f;
+            
         }
         catch (Exception e)
         {
@@ -172,15 +192,16 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                 // Initialize script based on the information in my JSONStorables
 
                 //these are the values stored on save
-                //animOn_OffCallback(animOn_Off.val);
+                animOn_OffCallback(animOn_Off.val);
                 // SuperController.LogMessage("anim_on_OffCallback called from update InitEditor");
-                //RotationFloatCallback(ROTATIONsliderFloat);
+                RotationFloatCallback(ROTATIONsliderFloat);
                 // SuperController.LogMessage("RotationFloatCallback called from update InitEditor");
-                // AnimSpeedFloatCallback(ANIMSPEEDsliderFloat);
+                 AnimSpeedFloatCallback(ANIMSPEEDsliderFloat);
                 // SuperController.LogMessage("AnimSpeedFloatCallback called from update InitEditor");
-                //ScaleFloatCallback(SCALEsliderFloat);
-                // SuperController.LogMessage("ScaleFloatCallback called from update InitEditor with value" + jfloat3.val);
-                // DildoChooserCallback(dildoChoice.val);
+
+                IntermediateScaleHolder(SCALEsliderFloat);
+               
+                DildoChooserCallback(dildoChoice.val);
 
 
 
@@ -246,18 +267,38 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
     protected void DildoChooserCallback(string choice)
     {
 
+     if (machineTR != null)
+     {
         if (choice == "Default")
-        { selectedDildo = defaultDildo; }
+        { selectedDildo = defaultDildo;
+          //SCALEslider.slider.value = 1.5f;
+          SCALEslider.slider.value = SCALEdefaultdildo.val;
+          ScaleFloatCallback(SCALEdefaultdildo);
+         // ScaleFloatCallback(SCALEdefaultdildo);
+        }
         else
         if (choice == "Chance Unflared")
-        { selectedDildo = chanceUnflaredDildo; }
+        { selectedDildo = chanceUnflaredDildo;
+            SCALEslider.slider.value = SCALEchanceunflareddildo.val;
+            ScaleFloatCallback(SCALEchanceunflareddildo);
+            // ScaleFloatCallback(SCALEchanceunflareddildo);
+        }
         else
         if (choice == "Rex")
-        { selectedDildo = rexDildo; }
+        { selectedDildo = rexDildo;
+            SCALEslider.slider.value = SCALErexdildo.val;
+            ScaleFloatCallback(SCALErexdildo);
+         // ScaleFloatCallback(SCALErexdildo);
+        }
         else
         if (choice == "Tucker")
-        { selectedDildo = tuckerDildo; }
+        { selectedDildo = tuckerDildo;
+            SCALEslider.slider.value = SCALEtuckerdildo.val;
+            ScaleFloatCallback(SCALEtuckerdildo);
+         // ScaleFloatCallback(SCALEtuckerdildo);
+        }
 
+        //set scale for selected dildo
 
         for (int i = 0; i < dildoArray.Length; i++)
         {
@@ -275,29 +316,12 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                 }
             }
         }
+     }
     }
     protected void ScaleFloatCallback(JSONStorableFloat scale)
     {
-        if (selectedDildo == defaultDildo)
-        {
-            SCALEdefaultdildo = scale;
-        }
-        else if
-            (selectedDildo == chanceUnflaredDildo)
-        {
-            SCALEchanceunflareddildo = scale;
-        }
-        else if
-            (selectedDildo == rexDildo)
-        {
-            SCALErexdildo = scale;
-        }
-        else if
-            (selectedDildo == tuckerDildo)
-        {
-            SCALEtuckerdildo = scale;
-        }
-
+       if (machineTR != null)
+       {
         for (int i = 0; i < dildoArray.Length; i++)
         {
             if (selectedDildo != null)
@@ -311,12 +335,38 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                     DoTurnCollidersforChildrenON(selectedDildo);
                 }
             }
+
         }
+       }
     }
 
     /*
     *********************UTILITY METHODS**********************
     */
+
+private void IntermediateScaleHolder(JSONStorableFloat s)
+    {
+     if (machineTR != null)
+    {
+        if (selectedDildo == defaultDildo)
+        {
+           SCALEdefaultdildo.val = s.val;
+        }
+        else if (selectedDildo == chanceUnflaredDildo)
+        {
+            SCALEchanceunflareddildo.val = s.val;
+        }
+        else if (selectedDildo == rexDildo )
+        {
+            SCALErexdildo.val = s.val;
+        }
+        else if (selectedDildo == tuckerDildo)
+        {
+           SCALEtuckerdildo.val = s.val;
+        }
+        ScaleFloatCallback(s);
+     }
+    }
 
     private Transform getObjectRoot(Transform parent)
     // Recursive function searching for a transform containing the string set in objectNameSearchString
