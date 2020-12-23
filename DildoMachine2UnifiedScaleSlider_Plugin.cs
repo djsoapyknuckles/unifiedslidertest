@@ -10,11 +10,13 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
 {
     // My JSONStorables
     public JSONStorableBool animOn_Off;
+    public JSONStorableBool colliderOn_Off;
     public JSONStorableFloat SCALEsliderFloat;
     public JSONStorableFloat SCALEdefaultdildo;
     public JSONStorableFloat SCALEchanceunflareddildo;
     public JSONStorableFloat SCALErexdildo;
     public JSONStorableFloat SCALEtuckerdildo;
+    public JSONStorableFloat SCALEheadstrap;
     public JSONStorableFloat ROTATIONsliderFloat;
     public JSONStorableFloat ANIMSPEEDsliderFloat;
     public JSONStorableStringChooser dildoChoice;
@@ -27,6 +29,7 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
     private Transform chanceUnflaredDildo;
     private Transform rexDildo;
     private Transform tuckerDildo;
+    private Transform headStrap;
     private Transform[] dildoArray;
     private Animator _animator;
     private Collider[] colliderArray;
@@ -62,8 +65,15 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                 CreateToggle(animOn_Off, false);
                 RegisterBool(animOn_Off);
 
+                //collider toggle
+            
+                colliderOn_Off = new JSONStorableBool("collider on/off", true, colliderOn_OffCallback);
+                colliderOn_Off.storeType = JSONStorableParam.StoreType.Full;
+                CreateToggle(colliderOn_Off, false);
+                RegisterBool(colliderOn_Off);
+
                 // JSONStorableFloat Rotation Slider
-                 ROTATIONsliderFloat = new JSONStorableFloat("Rotation", 0f, RotationFloatCallback, 0f, 90f, true);
+                ROTATIONsliderFloat = new JSONStorableFloat("Rotation", 0f, RotationFloatCallback, 0f, 90f, true);
                  ROTATIONsliderFloat.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(ROTATIONsliderFloat);
                  ROTATIONslider = CreateSlider(ROTATIONsliderFloat, false);
@@ -81,7 +91,8 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
                  choices.Add("Chance Unflared");
                  choices.Add("Rex");
                  choices.Add("Tucker");
-                 //choices.Add("Choice3");
+                 choices.Add("Head Strap");
+                 
                  dildoChoice = new JSONStorableStringChooser("Chooser", choices, "Default", "Choose Dildo", DildoChooserCallback);
                  dildoChoice.storeType = JSONStorableParam.StoreType.Full;
                  RegisterStringChooser(dildoChoice);
@@ -170,11 +181,12 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
         rexDildo = ObjectRoot.Find("rex_10k_rigged");
 
         tuckerDildo = ObjectRoot.Find("tucker_23k_rigged");
+        headStrap = ObjectRoot.Find("headStrapAttachment");
 
-        dildoArray = new Transform[] { defaultDildo, chanceUnflaredDildo, rexDildo, tuckerDildo };
+        dildoArray = new Transform[] { defaultDildo, chanceUnflaredDildo, rexDildo, tuckerDildo, headStrap };
 
         // found my transforms, now the rest
-        if (machineTR && defaultDildo && chanceUnflaredDildo && rexDildo && tuckerDildo)
+        if (machineTR && defaultDildo && chanceUnflaredDildo && rexDildo && tuckerDildo && headStrap)
         {
             // Finding Animator component
             _animator = machineTR.GetComponentInChildren<Animator>();
@@ -241,6 +253,23 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
         }
 
     }
+    protected void colliderOn_OffCallback (bool on_off)
+    {
+
+        if (machineTR)
+        {
+            if (on_off)
+            {
+                DoTurnCollidersforChildrenON(selectedDildo);
+            }
+            else
+            {
+                DoTurnCollidersforChildrenOFF(selectedDildo);
+            }
+
+        }
+
+    }
 
     protected void RotationFloatCallback(JSONStorableFloat rotation)
     {
@@ -295,7 +324,14 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
          // ScaleFloatCallback(SCALEtuckerdildo);
         }
 
-        //set scale for selected dildo
+        else
+        if (choice =="Head Strap")
+            {
+                
+              selectedDildo = headStrap;
+              SCALEslider.slider.value = SCALEtuckerdildo.val;
+              ScaleFloatCallback(SCALEtuckerdildo);
+             }
 
         for (int i = 0; i < dildoArray.Length; i++)
         {
