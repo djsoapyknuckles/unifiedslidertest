@@ -115,10 +115,14 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
 
                  SCALEtuckerdildo = new JSONStorableFloat("scaletuckerdildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
                  SCALEtuckerdildo.storeType = JSONStorableParam.StoreType.Full;
-                 RegisterFloat(SCALEtuckerdildo); 
+                 RegisterFloat(SCALEtuckerdildo);
 
-                 //JSONStorableFloat Scale Slider
-                 SCALEsliderFloat = new JSONStorableFloat("Scale Selected Dildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true); 
+                 SCALEheadstrap = new JSONStorableFloat("scaleheadstrap", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true);
+                 SCALEheadstrap.storeType = JSONStorableParam.StoreType.Full;
+                 RegisterFloat(SCALEheadstrap);
+
+            //JSONStorableFloat Scale Slider
+            SCALEsliderFloat = new JSONStorableFloat("Scale Selected Dildo", 1.0f, IntermediateScaleHolder, 0.5f, 1.5f, true); 
                  SCALEsliderFloat.storeType = JSONStorableParam.StoreType.Full;
                  RegisterFloat(SCALEsliderFloat);
                  SCALEslider = CreateSlider(SCALEsliderFloat, false);
@@ -181,6 +185,7 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
         rexDildo = ObjectRoot.Find("rex_10k_rigged");
 
         tuckerDildo = ObjectRoot.Find("tucker_23k_rigged");
+
         headStrap = ObjectRoot.Find("headStrapAttachment");
 
         dildoArray = new Transform[] { defaultDildo, chanceUnflaredDildo, rexDildo, tuckerDildo, headStrap };
@@ -329,7 +334,7 @@ public class DildoMachine2UnifiedScaleSlider : MVRScript
             {
                 
               selectedDildo = headStrap;
-              SCALEslider.slider.value = SCALEtuckerdildo.val;
+              SCALEslider.slider.value = SCALEheadstrap.val;
               ScaleFloatCallback(SCALEtuckerdildo);
              }
 
@@ -381,22 +386,27 @@ private void IntermediateScaleHolder(JSONStorableFloat s)
     {
      if (machineTR != null)
     {
-        if (selectedDildo == defaultDildo)
-        {
-           SCALEdefaultdildo.val = s.val;
-        }
-        else if (selectedDildo == chanceUnflaredDildo)
-        {
-            SCALEchanceunflareddildo.val = s.val;
-        }
-        else if (selectedDildo == rexDildo )
-        {
-            SCALErexdildo.val = s.val;
-        }
-        else if (selectedDildo == tuckerDildo)
-        {
-           SCALEtuckerdildo.val = s.val;
-        }
+            if (selectedDildo == defaultDildo)
+            {
+                SCALEdefaultdildo.val = s.val;
+            }
+            else if (selectedDildo == chanceUnflaredDildo)
+            {
+                SCALEchanceunflareddildo.val = s.val;
+            }
+            else if (selectedDildo == rexDildo)
+            {
+                SCALErexdildo.val = s.val;
+            }
+            else if (selectedDildo == tuckerDildo)
+            {
+                SCALEtuckerdildo.val = s.val;
+            }
+            else if (selectedDildo == headStrap)
+            {
+                SCALEheadstrap.val = s.val;
+            }
+                
         ScaleFloatCallback(s);
      }
     }

@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" 
-  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>6</LangVersion>
+    <ProjectGuid>{99B3413E-11DA-4DAC-9550-C042477297AB}</ProjectGuid>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Platform)' == 'Unity' ">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCpu' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
@@ -22,7 +19,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -60,12 +56,9 @@
       <HintPath>../../../../VaM_Data/Managed/Assembly-CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
-    <Compile Include="DildoMachine2UnifiedScaleSlider.cs" />
+    <Compile Include="DildoMachine2UnifiedScaleSlider_Plugin.cs" />
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
-
 </Project>
